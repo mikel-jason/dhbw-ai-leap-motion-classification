@@ -53,6 +53,9 @@ public class LeapMotionClassifierApplication implements ApplicationRunner {
                     detector.next(leapRecord);
                 }
             }
+            for (IDetector detector : detectors) {
+                LOGGER.info(detector.getClass().getName() + " -> " + detector.getCount());
+            }
         } catch (Exception e) {
             System.out.println("Catched: " + e.getMessage());
         }

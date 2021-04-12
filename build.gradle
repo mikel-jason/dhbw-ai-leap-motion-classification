@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.4.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'de.dhbw.tinf18e'
@@ -9,34 +9,39 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// https://mvnrepository.com/artifact/com.opencsv/opencsv
-	implementation group: 'com.opencsv', name: 'opencsv', version: '5.4'
+    // https://mvnrepository.com/artifact/com.opencsv/opencsv
+    implementation group: 'com.opencsv', name: 'opencsv', version: '5.4'
 
+    // https://github.com/himanshuvirmani/java-state-machine#for-gradle
+    compile("com.himanshuvirmani:java-state-machine:1.0.5") {
+        exclude group: 'org.projectlombok', module: 'lombok'
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+    }
 }
 
 // passing arguments with bootRun
 // https://www.baeldung.com/spring-boot-command-line-arguments
 bootRun {
-	if (project.hasProperty('args')) {
-		args project.args.split(',')
-	}
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
