@@ -23,6 +23,18 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// https://mvnrepository.com/artifact/com.opencsv/opencsv
+	implementation group: 'com.opencsv', name: 'opencsv', version: '5.4'
+
+}
+
+// passing arguments with bootRun
+// https://www.baeldung.com/spring-boot-command-line-arguments
+bootRun {
+	if (project.hasProperty('args')) {
+		args project.args.split(',')
+	}
 }
 
 test {
