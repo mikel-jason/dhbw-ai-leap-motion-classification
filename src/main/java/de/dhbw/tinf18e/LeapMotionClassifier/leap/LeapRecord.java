@@ -1,4 +1,4 @@
-package de.dhbw.tinf18e.LeapMotionClassifier.entities;
+package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;

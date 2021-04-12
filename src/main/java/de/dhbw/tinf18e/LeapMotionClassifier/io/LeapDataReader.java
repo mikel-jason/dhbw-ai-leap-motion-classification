@@ -1,7 +1,7 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.io;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import de.dhbw.tinf18e.LeapMotionClassifier.entities.LeapRecord;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapRecord;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
