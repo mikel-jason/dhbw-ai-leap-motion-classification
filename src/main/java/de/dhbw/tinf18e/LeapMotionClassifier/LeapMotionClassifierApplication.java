@@ -1,6 +1,7 @@
 package de.dhbw.tinf18e.LeapMotionClassifier;
 
 import de.dhbw.tinf18e.LeapMotionClassifier.io.LeapDataReader;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapProcessor;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapRecord;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.IDetector;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +25,7 @@ public class LeapMotionClassifierApplication implements ApplicationRunner {
     private LeapDataReader reader;
 
     @Autowired
-    private List<? extends IDetector> detectors;
+    private LeapProcessor leapProcessor;
 
     public static void main(String[] args) {
         SpringApplication.run(LeapMotionClassifierApplication.class, args);
@@ -44,20 +45,12 @@ public class LeapMotionClassifierApplication implements ApplicationRunner {
             return;
         }
 
-
         try {
             Path path = (new File(fileArg)).toPath();
             List<LeapRecord> leapRecords = reader.readLeapData(path);
-            for (LeapRecord leapRecord : leapRecords) {
-                for (IDetector detector : detectors) {
-                    detector.next(leapRecord);
-                }
-            }
-            for (IDetector detector : detectors) {
-                LOGGER.info(detector.getClass().getName() + " -> " + detector.getCount());
-            }
+            leapProcessor.start(leapRecords);
         } catch (Exception e) {
-            System.out.println("Catched: " + e.getMessage());
+            LOGGER.error(e);
         }
 
     }
