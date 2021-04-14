@@ -1,6 +1,6 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
-import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.IDetector;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.PalmXDetector;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.PalmYDetector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,6 +18,9 @@ public class LeapProcessor {
     @Autowired
     private PalmYDetector palmYDetector;
 
+    @Autowired
+    private PalmXDetector palmXDetector;
+
     public void start(List<LeapRecord> data) {
 
         List<LeapFrame> frames = data.stream()
@@ -25,10 +28,11 @@ public class LeapProcessor {
                 .map(record -> {
                     LeapFrame frame = new LeapFrame(record);
                     frame.analyze(palmYDetector);
+                    frame.analyze(palmXDetector);
+                    if (frame.getMotions().size() > 0)
+                        LOGGER.info(frame.getMotions());
                     return frame;
                 })
                 .collect(Collectors.toList());
-
-        LOGGER.info("Palm Y detected changes -> " + palmYDetector.getCount());
     }
 }
