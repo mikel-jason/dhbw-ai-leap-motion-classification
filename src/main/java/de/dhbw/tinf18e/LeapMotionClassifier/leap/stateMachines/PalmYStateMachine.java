@@ -53,4 +53,9 @@ public class PalmYStateMachine implements IStateMachine {
     public void fire(IStateMachineEvent event) throws TransitionException {
         machine.fire((Event) event);
     }
+
+    @Override
+    public IStateMachineState getCurrentState() {
+        return machine.getCurrentState();
+    }
 }

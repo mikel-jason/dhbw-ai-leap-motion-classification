@@ -1,7 +1,7 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
-import de.dhbw.tinf18e.LeapMotionClassifier.LeapMotionClassifierApplication;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.IDetector;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.PalmYDetector;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,19 @@ public class LeapProcessor {
     private static final Logger LOGGER = LogManager.getLogger(LeapProcessor.class);
 
     @Autowired
-    private List<? extends IDetector> detectors;
+    private PalmYDetector palmYDetector;
 
     public void start(List<LeapRecord> data) {
-        List<LeapRecord> validData = data.stream().filter(record -> record.getValid() == 1).collect(Collectors.toList());
 
-        for (LeapRecord leapRecord : validData) {
-            for (IDetector detector : detectors) {
-                detector.next(leapRecord);
-            }
-        }
-        for (IDetector detector : detectors) {
-            LOGGER.info(detector.getClass().getName() + " -> " + detector.getCount());
-        }
+        List<LeapFrame> frames = data.stream()
+                .filter(record -> record.getValid() == 1)
+                .map(record -> {
+                    LeapFrame frame = new LeapFrame(record);
+                    frame.analyze(palmYDetector);
+                    return frame;
+                })
+                .collect(Collectors.toList());
+
+        LOGGER.info("Palm Y detected changes -> " + palmYDetector.getCount());
     }
 }

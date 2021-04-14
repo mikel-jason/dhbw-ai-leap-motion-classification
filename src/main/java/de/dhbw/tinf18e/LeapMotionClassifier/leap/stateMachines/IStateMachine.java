@@ -6,6 +6,8 @@ public interface IStateMachine {
 
     void fire(IStateMachineEvent event) throws TransitionException;
 
+    IStateMachineState getCurrentState();
+
     int getCount();
 
 }

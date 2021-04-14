@@ -2,6 +2,7 @@ package de.dhbw.tinf18e.LeapMotionClassifier.leap.detector;
 
 import com.himanshuvirmani.exceptions.TransitionException;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapRecord;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.stateMachines.IStateMachineState;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.stateMachines.PalmYStateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,10 @@ public class PalmYDetector implements IDetector {
     @Override
     public int getCount() {
         return stateMachine.getCount();
+    }
+
+    @Override
+    public IStateMachineState getState() {
+        return stateMachine.getCurrentState();
     }
 }
