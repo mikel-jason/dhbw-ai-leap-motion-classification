@@ -1,0 +1,7 @@
+detectors:
+  palmX:
+    num_frames: 25
+    threshold: 10
+  palmY:
+    num_frames: 25
+    threshold: 10

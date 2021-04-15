@@ -5,6 +5,7 @@ import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapRecord;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.stateMachines.IStateMachineState;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.stateMachines.PalmYStateMachine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,13 @@ public class PalmYDetector implements IDetector {
     @Autowired
     private PalmYStateMachine stateMachine;
 
-    private EdgeDetectorQueue edgeDetector = new EdgeDetectorQueue(25, 35.0, record -> record.getPalmPositionY());
+    @Value("detectors.palmY.num_frames")
+    private int numFrames;
+
+    @Value("detectors.palmY.threshold")
+    private int threshold;
+
+    private EdgeDetectorQueue edgeDetector = new EdgeDetectorQueue(numFrames, threshold, record -> record.getPalmPositionY());
 
     @Override
     public void next(LeapRecord record) {
