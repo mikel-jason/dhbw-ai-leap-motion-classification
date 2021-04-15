@@ -1,14 +1,11 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.io;
 
 import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapFrame;
-import de.dhbw.tinf18e.LeapMotionClassifier.leap.stateMachines.IStateMachineState;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
@@ -22,10 +19,10 @@ public class LeapFrameWriter {
 
     private class WrittenFrame {
 
-        private String motions;
+        private String observations;
 
         WrittenFrame(LeapFrame frame) {
-            motions = frame.getMotions().toString();
+            observations = frame.getObservations().toString();
         }
 
     }
