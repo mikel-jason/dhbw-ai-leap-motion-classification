@@ -19,9 +19,11 @@ public class LeapFrameWriter {
 
     private class WrittenFrame {
 
+        private int frameNum;
         private String observations;
 
         WrittenFrame(LeapFrame frame) {
+            frameNum = frame.getFrameNumber();
             observations = frame.getObservations().toString();
         }
 
