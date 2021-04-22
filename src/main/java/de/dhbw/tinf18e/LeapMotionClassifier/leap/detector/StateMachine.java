@@ -33,7 +33,7 @@ public class StateMachine  {
 
             // B -> A
             machine.transition().from(State.NEUTRAL).to(State.B).on(Event.B).create();
-            machine.transition().from(State.NEUTRAL).to(State.B_A).on(Event.A).setOnSuccessListener((from, to, on) -> count++).create();
+            machine.transition().from(State.B).to(State.B_A).on(Event.A).setOnSuccessListener((from, to, on) -> count++).create();
 
             // to neutral
             machine.transition().from(State.A).to(State.NEUTRAL).on(Event.HOLD).create();
