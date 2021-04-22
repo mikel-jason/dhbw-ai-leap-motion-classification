@@ -15,6 +15,7 @@ public class LeapFrame {
     private static final Logger LOGGER = LogManager.getLogger(LeapFrame.class);
 
     private final LeapRecord leapRecord;
+    @Getter private final int frameNumber;
 
     @Getter
     private Set<Observation> observations = new HashSet<Observation>();

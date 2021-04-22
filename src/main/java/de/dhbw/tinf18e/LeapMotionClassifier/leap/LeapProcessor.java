@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,17 +48,20 @@ public class LeapProcessor {
 
     public void start(List<LeapRecord> data) {
 
+        AtomicInteger frameNum = new AtomicInteger();
+
         EdgeDetector palmXDetector = edgeDetectorFactory.create(palmXNumFrames, palmXThreshold, record -> record.getPalmPositionX(), Observation.MoveHorizontal);
         EdgeDetector palmYDetector = edgeDetectorFactory.create(palmYNumFrames, palmYThreshold, record -> record.getPalmPositionY(), Observation.MoveVertical);
 
         List<LeapFrame> frames = data.stream()
                 .filter(record -> record.getValid() == 1)
                 .map(record -> {
-                    LeapFrame frame = new LeapFrame(record);
+                    frameNum.getAndIncrement();
+                    LeapFrame frame = new LeapFrame(record, frameNum.get());
                     frame.analyze(palmYDetector);
                     frame.analyze(palmXDetector);
                     if (frame.getObservations().size() > 0)
-                        LOGGER.info(frame.getObservations());
+                        LOGGER.info("[" + frame.getFrameNumber() + "] " + frame.getObservations());
                     return frame;
                 })
                 .collect(Collectors.toList());
