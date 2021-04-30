@@ -1,5 +1,8 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
+import de.dhbw.tinf18e.LeapMotionClassifier.LeapMotionClassifierApplication;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyAnalyzer;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
 import de.dhbw.tinf18e.LeapMotionClassifier.io.LeapFrameWriter;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetector;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetectorFactory;
@@ -53,6 +56,9 @@ public class LeapProcessor {
     @Autowired
     ApplicationArguments args;
 
+    @Autowired
+    FrequencyAnalyzer frequencyAnalyzer;
+
     public void start(List<LeapRecord> data) {
 
         int frameNum = 0;
@@ -70,10 +76,10 @@ public class LeapProcessor {
             if(frameNum <= SKIP_SECONDS * FRAMES_PER_SECOND)
                 continue;
 
-            frame.analyze(palmYDetector);
-            frame.analyze(palmXDetector);
-            if (frame.getObservations().size() > 0)
-                LOGGER.info("[" + frame.getFrameNumber() + "] " + frame.getObservations());
+            FrequencyLevel yFreq = frequencyAnalyzer.analyze(palmYDetector, frame);
+            FrequencyLevel xFreq = frequencyAnalyzer.analyze(palmXDetector, frame);
+
+            LOGGER.info("[" + frame.getFrameNumber() + "] " + yFreq + " | " + xFreq);
 
         }
 

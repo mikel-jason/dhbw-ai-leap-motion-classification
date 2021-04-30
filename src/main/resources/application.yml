@@ -9,3 +9,12 @@ detectors:
 time:
   fps: 50
   skip-seconds: 1
+
+# thresholds: max number of events per minute for this level
+motion:
+  move-vertical:
+    low: 1
+    medium: 2
+  counter-move-horizontal:
+    low: 1
+    medium: 2
