@@ -1,7 +1,8 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
 import de.dhbw.tinf18e.LeapMotionClassifier.io.LeapFrameWriter;
-import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.*;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetector;
+import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetectorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,12 @@ public class LeapProcessor {
     @Value("${detectors.palmY.threshold}")
     private double palmYThreshold;
 
+    @Value("${time.fps}")
+    int FRAMES_PER_SECOND;
+
+    @Value("${time.skip-seconds}")
+    int SKIP_SECONDS;
+
 //    @Autowired
 //    private PalmYDetector palmYDetector;
 //
@@ -48,23 +55,27 @@ public class LeapProcessor {
 
     public void start(List<LeapRecord> data) {
 
-        AtomicInteger frameNum = new AtomicInteger();
+        int frameNum = 0;
 
         EdgeDetector palmXDetector = edgeDetectorFactory.create(palmXNumFrames, palmXThreshold, record -> record.getPalmPositionX(), Observation.MoveHorizontal);
         EdgeDetector palmYDetector = edgeDetectorFactory.create(palmYNumFrames, palmYThreshold, record -> record.getPalmPositionY(), Observation.MoveVertical);
 
-        List<LeapFrame> frames = data.stream()
-                .filter(record -> record.getValid() == 1)
-                .map(record -> {
-                    frameNum.getAndIncrement();
-                    LeapFrame frame = new LeapFrame(record, frameNum.get());
-                    frame.analyze(palmYDetector);
-                    frame.analyze(palmXDetector);
-                    if (frame.getObservations().size() > 0)
-                        LOGGER.info("[" + frame.getFrameNumber() + "] " + frame.getObservations());
-                    return frame;
-                })
-                .collect(Collectors.toList());
+        List<LeapFrame> frames = new ArrayList<>();
+
+        for(LeapRecord record : data.stream().filter(record -> record.getValid() == 1).collect(Collectors.toList())) {
+            frameNum++;
+            LeapFrame frame = new LeapFrame(record, frameNum);
+            frames.add(frame);
+
+            if(frameNum <= SKIP_SECONDS * FRAMES_PER_SECOND)
+                continue;
+
+            frame.analyze(palmYDetector);
+            frame.analyze(palmXDetector);
+            if (frame.getObservations().size() > 0)
+                LOGGER.info("[" + frame.getFrameNumber() + "] " + frame.getObservations());
+
+        }
 
         try {
             String fileArg;

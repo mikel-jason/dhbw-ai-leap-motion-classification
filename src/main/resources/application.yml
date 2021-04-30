@@ -5,3 +5,7 @@ detectors:
   palmY:
     num_frames: 25
     threshold: 10.0
+
+time:
+  fps: 50
+  skip-seconds: 1
