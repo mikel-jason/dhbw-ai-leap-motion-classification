@@ -1,10 +1,10 @@
 detectors:
   palmX:
-    num_frames: 25
-    threshold: 10.0
+    num_frames: 40
+    threshold: 30.0
   palmY:
-    num_frames: 25
-    threshold: 10.0
+    num_frames: 40
+    threshold: 30.0
 
 time:
   fps: 50

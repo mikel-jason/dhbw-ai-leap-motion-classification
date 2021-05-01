@@ -51,20 +51,23 @@ public class StateMachineFactory {
         stateMachine.setFramesPerSecond(FRAMES_PER_SECOND);
 
         try {
-            // in NEUTRAL
-            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
-            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
 
-            // in A
+            // UP -> DOWN
+            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).create();
+            machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.A_B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+
+            // DOWN -> UP
+            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).create();
+            machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.B_A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()            ).create();
+
+            // back to NEUTRAL
             machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
-            machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
-
-            // in B
+            machine.transition().from(AbstractStateMachine.State.A_B).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
             machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
-            machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+            machine.transition().from(AbstractStateMachine.State.B_A).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
 
         } catch (TransitionCreationException e) {
-            LOGGER.error("Cannot create state machine for palm X / horizontal movement", e);
+            LOGGER.error("Cannot create state machine for palm X / (counter) horizontal movement", e);
         }
 
         return stateMachine;
@@ -80,22 +83,20 @@ public class StateMachineFactory {
 
         try {
 
-            // UP -> DOWN
-            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).create();
-            machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.A_B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+            // in NEUTRAL
+            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
 
-            // DOWN -> UP
-            machine.transition().from(AbstractStateMachine.State.NEUTRAL).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).create();
-            machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.B_A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
-
-            // back to NEUTRAL
+            // in A
             machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
-            machine.transition().from(AbstractStateMachine.State.A_B).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
+            machine.transition().from(AbstractStateMachine.State.A).to(AbstractStateMachine.State.B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+
+            // in B
             machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
-            machine.transition().from(AbstractStateMachine.State.B_A).to(AbstractStateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
+            machine.transition().from(AbstractStateMachine.State.B).to(AbstractStateMachine.State.A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
 
         } catch (TransitionCreationException e) {
-            LOGGER.error("Cannot create state machine for palm Y / (counter) vertical movement", e);
+            LOGGER.error("Cannot create state machine for palm Y / vertical movement", e);
         }
 
         return stateMachine;
