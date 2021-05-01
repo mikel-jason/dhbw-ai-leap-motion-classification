@@ -4,6 +4,9 @@ import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
 import lombok.Setter;
 
+/**
+ * Entity representing a LEAP data record as given
+ */
 @Data
 public class LeapRecord {
 

@@ -26,7 +26,7 @@ public class LeapProcessor {
     int FRAMES_PER_SECOND;
 
     @Value("${time.skip-seconds}")
-    int SKIP_SECONDS;
+    double SKIP_SECONDS;
 
     @Autowired
     private LeapFrameWriter leapFrameWriter;
@@ -37,6 +37,10 @@ public class LeapProcessor {
     @Autowired
     private StateMachineFactory stateMachineFactory;
 
+    /**
+     * Main method controlling the classification
+     * @param data List of input data
+     */
     public void start(List<LeapRecord> data) {
 
         int frameNum = 0;
@@ -51,6 +55,9 @@ public class LeapProcessor {
             LeapFrame frame = new LeapFrame(record, frameNum);
             frames.add(frame);
 
+            // users are assumed to first click start and the move their hand into the
+            // measurement area. this causes noise at the measurement's beginning which
+            // is skipped here
             if (frameNum <= SKIP_SECONDS * FRAMES_PER_SECOND)
                 continue;
 
@@ -64,6 +71,7 @@ public class LeapProcessor {
 
         }
 
+        // if out parameter is set, the results are printed to csv
         try {
             String fileArg;
             try {

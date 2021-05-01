@@ -9,34 +9,37 @@ import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Machine to analyze a time-series value based on an EdgeDetector
+ */
 @RequiredArgsConstructor
 public class StateMachine extends AbstractStateMachine {
 
     private static final Logger LOGGER = LogManager.getLogger(StateMachine.class);
 
+    /** Finite state machine */
     private final com.himanshuvirmani.StateMachine<State, EdgeDetector.Edge> machine;
 
     private final EdgeDetector detector;
 
+    /** Max value to be classified as LOW frequency */
     private final double MAX_LOW;
 
+    /** Max value to be classified as MEDIUM frequency */
     private final double MAX_MEDIUM;
 
+    /** Motion to be analyzed with this machine */
     private final Motion motion;
 
+    /** Count of relevant state(s) */
     @Getter
     private Integer count = 0;
 
-    @Override
-    public void fire(EdgeDetector.Edge edge) {
-        try {
-            machine.fire(edge);
-        } catch (TransitionException e) {
-            if (!e.getMessage().startsWith("No transitions defined from "))
-                LOGGER.error("Cannot perform, transition", e);
-        }
-    }
-
+    /**
+     * Load next frame to machine to be analyzed
+     * @param frame
+     * @return
+     */
     @Override
     public FrequencyLevel next(LeapFrame frame) {
         EdgeDetector.Edge edge = detector.next(frame.getLeapRecord());
@@ -45,8 +48,26 @@ public class StateMachine extends AbstractStateMachine {
         return getFrequencyLevel(getCount(), frame.getFrameNumber(), MAX_LOW, MAX_MEDIUM);
     }
 
+    /**
+     * Apply edge on finite state machine
+     * @param edge
+     */
     @Override
-    public void incrementCount() {
+    protected void fire(EdgeDetector.Edge edge) {
+        try {
+            machine.fire(edge);
+        } catch (TransitionException e) {
+            // 3rd party lib throws an error when there's no matching transition
+            // hide error to not have to define every transition possible
+            if (!e.getMessage().startsWith("No transitions defined from "))
+                LOGGER.error("Cannot perform, transition", e);
+        }
+    }
+
+
+    @Override
+    protected void incrementCount() {
+        // required as extra method to be available in factory for state machine transition success handlers
         count++;
         LOGGER.info("New count general:" + count);
     }

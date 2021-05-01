@@ -15,11 +15,11 @@ public abstract class AbstractStateMachine {
     @Setter
     int framesPerSecond;
 
-    public abstract void fire(EdgeDetector.Edge edge);
+    protected abstract void fire(EdgeDetector.Edge edge);
 
     public abstract FrequencyLevel next(LeapFrame frame);
 
-    public abstract void incrementCount();
+    protected abstract void incrementCount();
 
     public abstract Integer getCount();
 

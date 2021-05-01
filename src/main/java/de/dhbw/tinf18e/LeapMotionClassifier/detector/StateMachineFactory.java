@@ -7,6 +7,17 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Responsible for instantiating each state machine for analyzing the data.
+ *
+ * For an instantiation required:
+ * <ul>
+ *     <li>Values for the edge detector</li>
+ *     <li>Values (thresholds) for the frequency level classification</li>
+ *     <li>A value extractor lambda</li>
+ *     <li>A state machine to define observed state(s)</li>
+ * </ul>
+ */
 @Service
 public class StateMachineFactory {
 

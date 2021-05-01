@@ -1,3 +1,13 @@
+# general time parameters
+# -> fps (int): How many records/frames is one second
+# -> skip-seconds (double): How many seconds are skipped at the beginning of the measurement
+time:
+  fps: 50
+  skip-seconds: 1.0
+
+# calibration data for the time-series analysis
+# -> num_frames (int): How many frames are considered for an observation
+# -> threshold (double): Determines when a change in the series is significant (above) or treated as irrelevant / noise (below)
 detectors:
   palmX:
     num_frames: 40
@@ -6,11 +16,10 @@ detectors:
     num_frames: 40
     threshold: 30.0
 
-time:
-  fps: 50
-  skip-seconds: 1
-
-# thresholds: max number of events per minute for this level
+# Threshold for classification of frequency
+# Two values per motion:
+# -> low: Max number of motions per second the be regarded as LOW frequency
+# -> medium: Max number of motions per second the be regarded as MEDIUM frequency
 motion:
   move-vertical:
     low: 1

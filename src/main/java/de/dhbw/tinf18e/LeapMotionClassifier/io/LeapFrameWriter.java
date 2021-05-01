@@ -20,6 +20,11 @@ import java.util.List;
 @Service
 public class LeapFrameWriter {
 
+    /**
+     * Inner class for selecting data to be written to csv
+     *
+     * Note: Columns will be ordered alphabetically, not corresponding to their order in here
+     */
     private class WrittenFrame {
 
         private int frameNum;

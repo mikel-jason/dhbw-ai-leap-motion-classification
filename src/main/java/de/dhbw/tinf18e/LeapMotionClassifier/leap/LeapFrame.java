@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Frame object storing all info of a certain frame of the measurement.
+ */
 @RequiredArgsConstructor
 public class LeapFrame {
 

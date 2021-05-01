@@ -30,6 +30,12 @@ public class LeapMotionClassifierApplication implements ApplicationRunner {
         SpringApplication.run(LeapMotionClassifierApplication.class, args);
     }
 
+
+    /**
+     * Handles parsing input file and starts processpr
+     * @see LeapProcessor#start(List) 
+     * @param args
+     */
     @Override
     public void run(ApplicationArguments args) {
 
