@@ -42,7 +42,6 @@ public class StateMachine extends AbstractStateMachine {
         EdgeDetector.Edge edge = detector.next(frame.getLeapRecord());
         frame.setEdge(motion, edge);
         fire(edge);
-        LOGGER.info(getCount());
         return getFrequencyLevel(getCount(), frame.getFrameNumber(), MAX_LOW, MAX_MEDIUM);
     }
 

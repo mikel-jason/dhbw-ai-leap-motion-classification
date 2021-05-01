@@ -60,7 +60,7 @@ public class LeapProcessor {
             frame.setFrequencyLevel(Motion.VerticalCounterMovement, xFrequencyLevel);
             frame.setFrequencyLevel(Motion.HorizontalMovement, yFrequencyLevel);
 
-            LOGGER.info("[" + frame.getFrameNumber() + "] " + xFrequencyLevel + " | " + yFrequencyLevel);
+            LOGGER.info("[" + frame.getFrameNumber() + "] X: " + xFrequencyLevel + " | Y: " + yFrequencyLevel);
 
         }
 
