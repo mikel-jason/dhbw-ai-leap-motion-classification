@@ -5,6 +5,9 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
+import de.dhbw.tinf18e.LeapMotionClassifier.detector.EdgeDetector;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapFrame;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,21 @@ public class LeapFrameWriter {
     private class WrittenFrame {
 
         private int frameNum;
-        private String observations;
+        private double palmPositionX;
+        private double palmPositionY;
+        private EdgeDetector.Edge palmXEdge;
+        private EdgeDetector.Edge palmYEdge;
+        private FrequencyLevel horizontalMovement;
+        private FrequencyLevel verticalCounterMovement;
 
         WrittenFrame(LeapFrame frame) {
             frameNum = frame.getFrameNumber();
-            observations = frame.getObservations().toString();
+            palmPositionX = frame.getLeapRecord().getPalmPositionX();
+            palmPositionY = frame.getLeapRecord().getPalmPositionY();
+            palmXEdge = frame.getEdge(Motion.HorizontalMovement);
+            palmYEdge = frame.getEdge(Motion.VerticalCounterMovement);
+            horizontalMovement = frame.getFrequencyLevel(Motion.HorizontalMovement);
+            verticalCounterMovement = frame.getFrequencyLevel(Motion.VerticalCounterMovement);
         }
 
     }

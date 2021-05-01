@@ -1,4 +1,4 @@
-package de.dhbw.tinf18e.LeapMotionClassifier.leap.detector;
+package de.dhbw.tinf18e.LeapMotionClassifier.detector;
 
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapRecord;
 import lombok.RequiredArgsConstructor;

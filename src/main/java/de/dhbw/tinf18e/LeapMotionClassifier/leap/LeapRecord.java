@@ -2,6 +2,7 @@ package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
+import lombok.Setter;
 
 @Data
 public class LeapRecord {

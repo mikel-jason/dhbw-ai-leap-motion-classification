@@ -1,11 +1,10 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
-import de.dhbw.tinf18e.LeapMotionClassifier.LeapMotionClassifierApplication;
-import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyAnalyzer;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
+import de.dhbw.tinf18e.LeapMotionClassifier.detector.StateMachine;
+import de.dhbw.tinf18e.LeapMotionClassifier.detector.StateMachineFactory;
 import de.dhbw.tinf18e.LeapMotionClassifier.io.LeapFrameWriter;
-import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetector;
-import de.dhbw.tinf18e.LeapMotionClassifier.leap.detector.EdgeDetectorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,32 +22,11 @@ public class LeapProcessor {
 
     private static final Logger LOGGER = LogManager.getLogger(LeapProcessor.class);
 
-    @Autowired
-    private EdgeDetectorFactory edgeDetectorFactory;
-
-    @Value("${detectors.palmX.num_frames}")
-    private int palmXNumFrames;
-
-    @Value("${detectors.palmX.threshold}")
-    private double palmXThreshold;
-
-    @Value("${detectors.palmY.num_frames}")
-    private int palmYNumFrames;
-
-    @Value("${detectors.palmY.threshold}")
-    private double palmYThreshold;
-
     @Value("${time.fps}")
     int FRAMES_PER_SECOND;
 
     @Value("${time.skip-seconds}")
     int SKIP_SECONDS;
-
-//    @Autowired
-//    private PalmYDetector palmYDetector;
-//
-//    @Autowired
-//    private PalmXDetector palmXDetector;
 
     @Autowired
     private LeapFrameWriter leapFrameWriter;
@@ -57,29 +35,32 @@ public class LeapProcessor {
     ApplicationArguments args;
 
     @Autowired
-    FrequencyAnalyzer frequencyAnalyzer;
+    private StateMachineFactory stateMachineFactory;
 
     public void start(List<LeapRecord> data) {
 
         int frameNum = 0;
 
-        EdgeDetector palmXDetector = edgeDetectorFactory.create(palmXNumFrames, palmXThreshold, record -> record.getPalmPositionX(), Observation.MoveHorizontal);
-        EdgeDetector palmYDetector = edgeDetectorFactory.create(palmYNumFrames, palmYThreshold, record -> record.getPalmPositionY(), Observation.MoveVertical);
+        StateMachine palmXStateMachine = stateMachineFactory.createForPalmX();
+        StateMachine palmYStateMachine = stateMachineFactory.createForPalmY();
 
         List<LeapFrame> frames = new ArrayList<>();
 
-        for(LeapRecord record : data.stream().filter(record -> record.getValid() == 1).collect(Collectors.toList())) {
+        for (LeapRecord record : data.stream().filter(record -> record.getValid() == 1).collect(Collectors.toList())) {
             frameNum++;
             LeapFrame frame = new LeapFrame(record, frameNum);
             frames.add(frame);
 
-            if(frameNum <= SKIP_SECONDS * FRAMES_PER_SECOND)
+            if (frameNum <= SKIP_SECONDS * FRAMES_PER_SECOND)
                 continue;
 
-            FrequencyLevel yFreq = frequencyAnalyzer.analyze(palmYDetector, frame);
-            FrequencyLevel xFreq = frequencyAnalyzer.analyze(palmXDetector, frame);
+            FrequencyLevel xFrequencyLevel = palmXStateMachine.next(frame);
+            FrequencyLevel yFrequencyLevel = palmYStateMachine.next(frame);
 
-            LOGGER.info("[" + frame.getFrameNumber() + "] " + yFreq + " | " + xFreq);
+            frame.setFrequencyLevel(Motion.VerticalCounterMovement, xFrequencyLevel);
+            frame.setFrequencyLevel(Motion.HorizontalMovement, yFrequencyLevel);
+
+            LOGGER.info("[" + frame.getFrameNumber() + "] " + xFrequencyLevel + " | " + yFrequencyLevel);
 
         }
 
