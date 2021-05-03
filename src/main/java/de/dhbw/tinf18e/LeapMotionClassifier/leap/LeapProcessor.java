@@ -1,5 +1,7 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.Difficulty;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.DifficultyClassifier;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
 import de.dhbw.tinf18e.LeapMotionClassifier.detector.StateMachine;
@@ -37,6 +39,9 @@ public class LeapProcessor {
     @Autowired
     private StateMachineFactory stateMachineFactory;
 
+    @Autowired
+    private DifficultyClassifier difficultyClassifier;
+
     /**
      * Main method controlling the classification
      * @param data List of input data
@@ -64,10 +69,12 @@ public class LeapProcessor {
             FrequencyLevel xFrequencyLevel = palmXStateMachine.next(frame);
             FrequencyLevel yFrequencyLevel = palmYStateMachine.next(frame);
 
-            frame.setFrequencyLevel(Motion.VerticalCounterMovement, xFrequencyLevel);
-            frame.setFrequencyLevel(Motion.HorizontalMovement, yFrequencyLevel);
+            frame.setFrequencyLevel(Motion.VerticalMovement, xFrequencyLevel);
+            frame.setFrequencyLevel(Motion.HorizontalCounterMovement, yFrequencyLevel);
 
-            LOGGER.info("[" + frame.getFrameNumber() + "] X: " + xFrequencyLevel + " | Y: " + yFrequencyLevel);
+            Difficulty diff = difficultyClassifier.classify(frame);
+
+            LOGGER.info("[" + frame.getFrameNumber() + "] " + diff + " (X: " + xFrequencyLevel + " | Y: " + yFrequencyLevel + ")");
 
         }
 

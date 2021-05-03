@@ -33,7 +33,7 @@ public class Measure{
 	
 	/**
 	 * Add an entry for the Measure by submitting the entry-values and the probability of the entry
-	 * @param List of entrys. Should be the same size of the Measure
+	 * @param entry List of entrys. Should be the same size of the Measure
 	 * @param probability probability of the entry
 	 */
 	public void addEntry(List<Integer> entry, double probability) {
