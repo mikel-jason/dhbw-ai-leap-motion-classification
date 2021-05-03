@@ -5,6 +5,7 @@ import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.Difficulty;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
 import de.dhbw.tinf18e.LeapMotionClassifier.detector.EdgeDetector;
@@ -34,6 +35,7 @@ public class LeapFrameWriter {
         private EdgeDetector.Edge palmYEdge;
         private FrequencyLevel horizontalMovement;
         private FrequencyLevel verticalCounterMovement;
+        private Difficulty difficulty;
 
         WrittenFrame(LeapFrame frame) {
             frameNum = frame.getFrameNumber();
@@ -43,6 +45,7 @@ public class LeapFrameWriter {
             palmYEdge = frame.getEdge(Motion.VerticalMovement);
             horizontalMovement = frame.getFrequencyLevel(Motion.HorizontalCounterMovement);
             verticalCounterMovement = frame.getFrequencyLevel(Motion.VerticalMovement);
+            difficulty = frame.getDifficulty();
         }
 
     }

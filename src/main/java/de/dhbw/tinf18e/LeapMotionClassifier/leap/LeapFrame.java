@@ -1,10 +1,12 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.leap;
 
+import de.dhbw.tinf18e.LeapMotionClassifier.ai.Difficulty;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.FrequencyLevel;
 import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
 import de.dhbw.tinf18e.LeapMotionClassifier.detector.EdgeDetector;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,9 @@ public class LeapFrame {
 
     @Getter private final LeapRecord leapRecord;
     @Getter private final int frameNumber;
+
+    @Getter @Setter
+    private Difficulty difficulty;
 
     private Map<Motion, EdgeDetector.Edge> motionEdges = new HashMap<>();
     private Map<Motion, FrequencyLevel> motionFrequencyLevels = new HashMap<>();

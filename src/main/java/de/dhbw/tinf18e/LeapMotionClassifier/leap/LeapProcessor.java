@@ -73,6 +73,7 @@ public class LeapProcessor {
             frame.setFrequencyLevel(Motion.HorizontalCounterMovement, yFrequencyLevel);
 
             Difficulty diff = difficultyClassifier.classify(frame);
+            frame.setDifficulty(diff);
 
             LOGGER.info("[" + frame.getFrameNumber() + "] " + diff + " (X: " + xFrequencyLevel + " | Y: " + yFrequencyLevel + ")");
 
