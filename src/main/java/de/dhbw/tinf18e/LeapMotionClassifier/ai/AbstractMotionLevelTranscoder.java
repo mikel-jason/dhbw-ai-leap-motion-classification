@@ -30,5 +30,15 @@ public abstract class AbstractMotionLevelTranscoder {
         }
         throw new RuntimeException("Unknown class index: " + index);
     }
+    protected static int getPriority(Difficulty diff) {
+        // ordered: on same criteria values, class with higher priority is selected
+        switch (diff) {
+            case ClassD: return 0;
+            case ClassA: return 1;
+            case ClassB: return 2;
+            case ClassC: return 3;
+        }
+        throw new RuntimeException("Unknown priority of Difficulty: " + diff);
+    }
 
 }

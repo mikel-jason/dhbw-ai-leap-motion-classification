@@ -32,17 +32,20 @@ public class DifficultyClassifier {
         Measure accumulatedMeasure = handler.getFirstMeasure();
 
         double currentPlausibility = 0.0;
-        Difficulty difficulty = Difficulty.ClassD;
+        Difficulty currentDifficulty = Difficulty.ClassD;
 
         for (int i = 0; i < 4; i++) {
             double testPlausibility = accumulatedMeasure.calculatePlausability(i);
+            Difficulty testDifficulty = AbstractMotionLevelTranscoder.getDifficulty(i);
 
-            if (testPlausibility > currentPlausibility) {
+            if (testPlausibility > currentPlausibility ||
+                    (testPlausibility == currentPlausibility &&
+                            AbstractMotionLevelTranscoder.getPriority(testDifficulty) > AbstractMotionLevelTranscoder.getPriority(currentDifficulty))
+            ) {
                 currentPlausibility = testPlausibility;
-                difficulty = AbstractMotionLevelTranscoder.getDifficulty(i);
+                currentDifficulty = testDifficulty;
             }
         }
-
-        return difficulty;
+        return currentDifficulty;
     }
 }
