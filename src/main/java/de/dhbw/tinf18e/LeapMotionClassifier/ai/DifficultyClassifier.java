@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service managing the classification of frames to Difficulty
+ */
 @Service
 public class DifficultyClassifier {
 
@@ -19,18 +22,30 @@ public class DifficultyClassifier {
     List<AbstractMotionLevelTranscoder> transcoders;
 
     public Difficulty classify(LeapFrame frame) {
+        /*
+        Create new DST
+        For transcoders (holding the motions, too)
+            Add as a measure
+            Add one entry holding all Difficulty classes which are possible with the given motion and level
+        Summarize measures
+        For Difficulty classes
+            choose if either
+            - higher plausibility
+            - same plausibility, but higher priority
+         */
         DempsterHandler handler = new DempsterHandler(Difficulty.values().length);
 
         for (AbstractMotionLevelTranscoder transcoder : transcoders) {
             Measure measure = handler.addMeasure();
             Motion motion = transcoder.getMotion();
             FrequencyLevel level = frame.getFrequencyLevel(motion);
-            measure.addEntry(transcoder.get(level), transcoder.getCertainty(level));
+            measure.addEntry(transcoder.getMeasureEntryCode(level), transcoder.getCertainty(level));
         }
 
         handler.accumulateAllMeasures();
         Measure accumulatedMeasure = handler.getFirstMeasure();
 
+        // init values with class D (unknown)
         double currentPlausibility = 0.0;
         Difficulty currentDifficulty = Difficulty.ClassD;
 

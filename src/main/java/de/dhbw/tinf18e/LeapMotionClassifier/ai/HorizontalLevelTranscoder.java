@@ -8,14 +8,14 @@ import java.util.List;
 @Service
 public class HorizontalLevelTranscoder extends AbstractMotionLevelTranscoder {
     @Override
-    public List<Integer> get(FrequencyLevel level) {
+    public List<Integer> getMeasureEntryCode(FrequencyLevel level) {
         switch (level) {
             case HIGH:
-                return transformToFlags(Arrays.asList(Difficulty.ClassA));
+                return getDstBitmap(Arrays.asList(Difficulty.ClassA));
             case MEDIUM:
-                return transformToFlags(Arrays.asList(Difficulty.ClassA, Difficulty.ClassC));
+                return getDstBitmap(Arrays.asList(Difficulty.ClassA, Difficulty.ClassC));
             case LOW:
-                return transformToFlags(Arrays.asList(Difficulty.ClassC));
+                return getDstBitmap(Arrays.asList(Difficulty.ClassC));
         }
         return null;
     }
