@@ -11,9 +11,9 @@ public class HorizontalLevelTranscoder extends AbstractMotionLevelTranscoder {
     public List<Integer> get(FrequencyLevel level) {
         switch (level) {
             case HIGH:
-                return transformToFlags(Arrays.asList(Difficulty.ClassA, Difficulty.ClassB));
+                return transformToFlags(Arrays.asList(Difficulty.ClassA));
             case MEDIUM:
-                return transformToFlags(Arrays.asList(Difficulty.ClassB, Difficulty.ClassC));
+                return transformToFlags(Arrays.asList(Difficulty.ClassA, Difficulty.ClassC));
             case LOW:
                 return transformToFlags(Arrays.asList(Difficulty.ClassC));
         }
