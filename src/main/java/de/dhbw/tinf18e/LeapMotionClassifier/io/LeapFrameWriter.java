@@ -39,10 +39,10 @@ public class LeapFrameWriter {
             frameNum = frame.getFrameNumber();
             palmPositionX = frame.getLeapRecord().getPalmPositionX();
             palmPositionY = frame.getLeapRecord().getPalmPositionY();
-            palmXEdge = frame.getEdge(Motion.HorizontalMovement);
-            palmYEdge = frame.getEdge(Motion.VerticalCounterMovement);
-            horizontalMovement = frame.getFrequencyLevel(Motion.HorizontalMovement);
-            verticalCounterMovement = frame.getFrequencyLevel(Motion.VerticalCounterMovement);
+            palmXEdge = frame.getEdge(Motion.HorizontalCounterMovement);
+            palmYEdge = frame.getEdge(Motion.VerticalMovement);
+            horizontalMovement = frame.getFrequencyLevel(Motion.HorizontalCounterMovement);
+            verticalCounterMovement = frame.getFrequencyLevel(Motion.VerticalMovement);
         }
 
     }

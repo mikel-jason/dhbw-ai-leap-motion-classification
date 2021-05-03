@@ -58,7 +58,7 @@ public class StateMachineFactory {
         EdgeDetector detector = new EdgeDetector(palmXNumFrames, palmXThreshold, r -> r.getPalmPositionX());
         com.himanshuvirmani.StateMachine<AbstractStateMachine.State, EdgeDetector.Edge> machine = new com.himanshuvirmani.StateMachine(AbstractStateMachine.State.NEUTRAL);
 
-        StateMachine stateMachine = new StateMachine(machine, detector, HORIZONTAL_MAX_LOW, HORIZONTAL_MAX_MEDIUM, Motion.HorizontalMovement);
+        StateMachine stateMachine = new StateMachine(machine, detector, HORIZONTAL_MAX_LOW, HORIZONTAL_MAX_MEDIUM, Motion.HorizontalCounterMovement);
         stateMachine.setFramesPerSecond(FRAMES_PER_SECOND);
 
         try {
@@ -89,7 +89,7 @@ public class StateMachineFactory {
         EdgeDetector detector = new EdgeDetector(palmYNumFrames, palmYThreshold, r -> r.getPalmPositionY());
         com.himanshuvirmani.StateMachine<AbstractStateMachine.State, EdgeDetector.Edge> machine = new com.himanshuvirmani.StateMachine(AbstractStateMachine.State.NEUTRAL);
 
-        StateMachine stateMachine = new StateMachine(machine, detector, VERTICAL_MAX_LOW, VERTICAL_MAX_MEDIUM, Motion.VerticalCounterMovement);
+        StateMachine stateMachine = new StateMachine(machine, detector, VERTICAL_MAX_LOW, VERTICAL_MAX_MEDIUM, Motion.VerticalMovement);
         stateMachine.setFramesPerSecond(FRAMES_PER_SECOND);
 
         try {
