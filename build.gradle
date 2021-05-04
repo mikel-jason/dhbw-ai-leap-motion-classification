@@ -33,9 +33,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-csv
     implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.12.3'
 
-    // https://mvnrepository.com/artifact/com.opencsv/opencsv
-    implementation group: 'com.opencsv', name: 'opencsv', version: '5.4'
-
     // https://github.com/himanshuvirmani/java-state-machine#for-gradle
     compile("com.himanshuvirmani:java-state-machine:1.0.5") {
         exclude group: 'org.projectlombok', module: 'lombok'
