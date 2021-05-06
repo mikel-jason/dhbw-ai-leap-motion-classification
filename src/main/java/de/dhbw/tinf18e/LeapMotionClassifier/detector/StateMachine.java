@@ -6,6 +6,7 @@ import de.dhbw.tinf18e.LeapMotionClassifier.ai.Motion;
 import de.dhbw.tinf18e.LeapMotionClassifier.leap.LeapFrame;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,12 +14,19 @@ import org.apache.logging.log4j.Logger;
  * Machine to analyze a time-series value based on an EdgeDetector
  */
 @RequiredArgsConstructor
-public class StateMachine extends AbstractStateMachine {
+public class StateMachine {
+
+    enum State {
+        NEUTRAL, A, A_B, B, B_A
+    }
 
     private static final Logger LOGGER = LogManager.getLogger(StateMachine.class);
 
     /** Finite state machine */
     private final com.himanshuvirmani.StateMachine<State, EdgeDetector.Edge> machine;
+
+    @Setter
+    int framesPerSecond;
 
     private final EdgeDetector detector;
 
@@ -40,7 +48,6 @@ public class StateMachine extends AbstractStateMachine {
      * @param frame
      * @return
      */
-    @Override
     public FrequencyLevel next(LeapFrame frame) {
         EdgeDetector.Edge edge = detector.next(frame.getLeapRecord());
         frame.setEdge(motion, edge);
@@ -52,7 +59,6 @@ public class StateMachine extends AbstractStateMachine {
      * Apply edge on finite state machine
      * @param edge
      */
-    @Override
     protected void fire(EdgeDetector.Edge edge) {
         try {
             machine.fire(edge);
@@ -64,11 +70,20 @@ public class StateMachine extends AbstractStateMachine {
         }
     }
 
-
-    @Override
     protected void incrementCount() {
         // required as extra method to be available in factory for state machine transition success handlers
         count++;
         LOGGER.info("New count general:" + count);
+    }
+
+    protected FrequencyLevel getFrequencyLevel(double count, double frameNumber, double max_low, double max_mid) {
+        double frequency = count * 60.0 * (double) framesPerSecond / frameNumber;
+        if (frequency <= max_low) {
+            return FrequencyLevel.LOW;
+        } else if (frequency <= max_mid) {
+            return FrequencyLevel.MEDIUM;
+        } else {
+            return FrequencyLevel.HIGH;
+        }
     }
 }
