@@ -13,7 +13,7 @@ public class VerticalLevelTranscoder extends AbstractMotionLevelTranscoder {
             case HIGH:
                 return getDstBitmap(Arrays.asList(Difficulty.ClassA));
             case MEDIUM:
-                return getDstBitmap(Arrays.asList(Difficulty.ClassA, Difficulty.ClassC));
+                return getDstBitmap(Arrays.asList(Difficulty.ClassA, Difficulty.ClassB));
             case LOW:
                 return getDstBitmap(Arrays.asList(Difficulty.ClassC));
         }
