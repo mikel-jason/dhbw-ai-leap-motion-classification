@@ -8,10 +8,13 @@ time:
 # calibration data for the time-series analysis
 # -> num_frames (int): How many frames are considered for an observation
 # -> threshold (double): Determines when a change in the series is significant (above) or treated as irrelevant / noise (below)
+# -> buffer-seconds (double): How many seconds buffer until a neutral edge is accepted. This merges separate movements as one,
+#    so care where to set it. If this is not present, there is no buffering (same as setting it to 0 explicitly)
 detectors:
   palmX:
     num_frames: 40
     threshold: 30.0
+    buffer-seconds: 0.7
   palmY:
     num_frames: 40
     threshold: 30.0
