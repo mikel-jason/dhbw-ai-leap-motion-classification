@@ -73,7 +73,6 @@ public class StateMachine {
     protected void incrementCount() {
         // required as extra method to be available in factory for state machine transition success handlers
         count++;
-        LOGGER.info("New count general:" + count);
     }
 
     protected FrequencyLevel getFrequencyLevel(double count, double frameNumber, double max_low, double max_mid) {
