@@ -1,5 +1,6 @@
 package de.dhbw.tinf18e.LeapMotionClassifier.io;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -33,7 +34,9 @@ public class LeapFrameWriter {
     private class WrittenFrame {
 
         private int frameNum;
+        @JsonFormat(pattern = "#.0##########")
         private double palmPositionX;
+        @JsonFormat(pattern = "#.0##########")
         private double palmPositionY;
         private EdgeDetector.Edge palmXEdge;
         private EdgeDetector.Edge palmYEdge;
