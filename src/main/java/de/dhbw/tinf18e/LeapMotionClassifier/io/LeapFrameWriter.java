@@ -40,8 +40,8 @@ public class LeapFrameWriter {
         private double palmPositionY;
         private EdgeDetector.Edge palmXEdge;
         private EdgeDetector.Edge palmYEdge;
-        private FrequencyLevel horizontalMovement;
-        private FrequencyLevel verticalCounterMovement;
+        private FrequencyLevel horizontalCounterMovement;
+        private FrequencyLevel verticalMovement;
         private Difficulty difficulty;
 
         WrittenFrame(LeapFrame frame) {
@@ -50,8 +50,8 @@ public class LeapFrameWriter {
             palmPositionY = frame.getLeapRecord().getPalmPositionY();
             palmXEdge = frame.getEdge(Motion.HorizontalCounterMovement);
             palmYEdge = frame.getEdge(Motion.VerticalMovement);
-            horizontalMovement = frame.getFrequencyLevel(Motion.HorizontalCounterMovement);
-            verticalCounterMovement = frame.getFrequencyLevel(Motion.VerticalMovement);
+            horizontalCounterMovement = frame.getFrequencyLevel(Motion.HorizontalCounterMovement);
+            verticalMovement = frame.getFrequencyLevel(Motion.VerticalMovement);
             difficulty = frame.getDifficulty();
         }
 
