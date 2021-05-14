@@ -14,7 +14,7 @@ detectors:
   palmX:
     num_frames: 40
     threshold: 30.0
-    buffer-seconds: 0.7
+    buffer-seconds: 0.5
   palmY:
     num_frames: 40
     threshold: 30.0
@@ -27,10 +27,10 @@ detectors:
 #          All values above high will be recognized as RANDOM
 motion:
   move-vertical:
-    low: 1
-    medium: 2
-    high: 5
+    low: 0.7
+    medium: 1
+    high: 3
   counter-move-horizontal:
-    low: 1
-    medium: 2
-    high: 5
+    low: 3
+    medium: 8
+    high: 15
