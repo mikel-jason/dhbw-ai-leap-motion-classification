@@ -126,6 +126,40 @@ The calibration for the time boxes were done with a given example dataset holdin
 
 The calibration of what is a *LOW* /... frequency would require more information about the game, its steering and players' assessments. The thresholds for the categorization are chosen based on two more data samples with no info about the player of the movements he/she is required to do. This is an immense lack of information since the app tries to detect unnecessary movements, but from data only, one cannot say which movement was necessary und which not. This leads to the corresponding parameter being easily customizable for someone with more intel.
 
+## Results and assessment
+The application is executed for five data samples. The results are shown in the images below. To display distinct values in the same plot, they are mapped to numbers as follows:
+
+- Edges: *UP* = 1, *DOWN* = -1, *NEUTRAL* = 0
+- Frequencies: *LOW* = 1, *MEDIUM* = 2, *HIGH* = 3, *RANDOM* = -1(, undefined = 0, when skipping frames)
+- Classes: *ClassA* = 3, *ClassB* = 2, *ClassC* = 1, *ClassD* = -1(, undefined = 0, when skipping frames)
+
+The XLSX sheet containing the graphics can be found [here](./docs/samples.xlsx).
+
+#### Sample 0
+This is demo data. Here, predefined movements are performed. This is no sample related to the game.
+
+![](./docs/sample_0.PNG)
+
+#### Sample 1
+![](./docs/sample_1.PNG)
+
+#### Sample 2
+![](./docs/sample_2.PNG)
+
+#### Sample 3
+![](./docs/sample_3.PNG)
+
+#### Sample 4
+![](./docs/sample_4.PNG)
+
+The first two plot of each sample show the measured data for the palm position in X and Y dimension in blue. The orange points represent the detected edge *UP*, *DOWN* and *NEUTRAL*. Here, we see an overall good match for the detected edges. Some particular frames are questionable in terms of if they should be detected or not. This is especially the case for the Y dimension. Sample 1 and 3 both show a decreasing height of the palm in the long run. Here, data should be compared with the users' assessment to re-calibrate. Sample 4 shows that a change of the palm's height is detected correctly (see frame 1,800 - 1,900).
+
+Most samples show significant different behavior during the first frames. This supports the application's option to skip frame in the beginning. This also happens at the end of a measurement. From the perspective of a live classification, the end of a game cannot be determined without game context. Therefore, the misleading classification at the end cannot be skipped. This has to be seen in the context of a user quitting the current game. Then, the live classification is not important anyways, so this is not expected to be important either.
+
+The classification diagram of sample 3 shows how the classification stabilizes over time. This is expected since during frequency calculation over a short period of time, a single event effects the frequency more than over a long period of time. Therefore, we see the jump of the frequency level of the vertical movement (Y) from *LOW* to *RANDOM* which means more than a *HIGH* frequency. Then, the level slowly decreases as there is more time passed but no event detected. At the end, another event is detected which lifts the level from *MEDIUM* to *HIGH*, being less volatile. This leads to the conclusion, that longer measurements are more resilient and should be preferred.
+
+Overall, the application and implemented model show their capability to classify different LEAP motion data samples into different classes, based on DST. All game samples (1 - 4) have been assigned to different classes. Ultimately, this only shows the technical feasibility. Without more intel about the game, especially which sequences of the game correspond to the samples, and the users' assessment, we cannot conclude whether this matches the target classification and behavior of the game.
+
 ## Acknowledgements
 - Benjamin Führnohr, author of the class for plain DST (see [de.dhbw.tinf18e.LeapMotionClassifier.ai.dempster](./src/main/java/de/dhbw/tinf18e/LeapMotionClassifier/ai/dempster))
 - [himanshuvirmani](https://github.com/himanshuvirmani/), author of the used FSM library [java-state-machine](https://github.com/himanshuvirmani/java-state-machine)
