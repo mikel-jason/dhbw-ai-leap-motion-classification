@@ -69,8 +69,8 @@ public class LeapProcessor {
             FrequencyLevel xFrequencyLevel = palmXStateMachine.next(frame);
             FrequencyLevel yFrequencyLevel = palmYStateMachine.next(frame);
 
-            frame.setFrequencyLevel(Motion.VerticalMovement, xFrequencyLevel);
-            frame.setFrequencyLevel(Motion.HorizontalCounterMovement, yFrequencyLevel);
+            frame.setFrequencyLevel(Motion.HorizontalCounterMovement, xFrequencyLevel);
+            frame.setFrequencyLevel(Motion.VerticalMovement, yFrequencyLevel);
 
             Difficulty diff = difficultyClassifier.classify(frame);
             frame.setDifficulty(diff);
