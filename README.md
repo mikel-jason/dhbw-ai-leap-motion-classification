@@ -86,11 +86,20 @@ The implementation follows the concept above.
 ### Approach for the variation of height
 This is the easies target movement. The simple movements *UP* and *DOWN* are directly mappable to the target movement. The FSM consists of three states representing both of these and *no variation of height*.
 
+The implemented FSM is shown below. The green transitions represent a detected motion and increase the counter. The leveraged FSM library allows skipping transitions keeping the machine's state. Therefore, these are not displayed here either.
+
+![](./docs/fsm_vertical.png)
+
 ### Approach for the horizontal counter-movement
 This adds counter-movement to the same logic as for the variation of height. The FSM consists of five states not only representing *no movement*, *left* and *right*, but also *left-right*, if a move to left is directly follows by a move to the right, and *right-left*. With these, the two paths for the target movement can be realized:
 
 - No movement -> Left -> Left-right
 - No movement-> Right -> Right-left
+
+The implemented FSM is shown below.
+
+
+![](./docs/fsm_horizontal.png)
 
 Each last transition marks a success and is counted by the state machine.
 
