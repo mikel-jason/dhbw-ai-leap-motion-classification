@@ -43,6 +43,9 @@ public class StateMachineFactory {
     @Value("${motion.counter-move-horizontal.medium}")
     private double HORIZONTAL_MAX_MEDIUM;
 
+    @Value("${motion.counter-move-horizontal.high}")
+    private double HORIZONTAL_MAX_HIGH;
+
     // palm Y
     @Value("${detectors.palmY.num_frames}")
     private int palmYNumFrames;
@@ -59,12 +62,15 @@ public class StateMachineFactory {
     @Value("${motion.move-vertical.medium}")
     private double VERTICAL_MAX_MEDIUM;
 
+    @Value("${motion.move-vertical.high}")
+    private double VERTICAL_MAX_HIGH;
+
     public StateMachine createForPalmX() {
 
         EdgeDetector detector = new EdgeDetector(palmXNumFrames, palmXThreshold, r -> r.getPalmPositionX());
         com.himanshuvirmani.StateMachine<StateMachine.State, EdgeDetector.Edge> machine = new com.himanshuvirmani.StateMachine(StateMachine.State.NEUTRAL);
 
-        StateMachine stateMachine = getStateMachine(detector, machine, HORIZONTAL_MAX_LOW, HORIZONTAL_MAX_MEDIUM, Motion.HorizontalCounterMovement, (int) (palmXTBufferSeconds * FRAMES_PER_SECOND));
+        StateMachine stateMachine = getStateMachine(detector, machine, HORIZONTAL_MAX_LOW, HORIZONTAL_MAX_MEDIUM, HORIZONTAL_MAX_HIGH, Motion.HorizontalCounterMovement, (int) (palmXTBufferSeconds * FRAMES_PER_SECOND));
         stateMachine.setFramesPerSecond(FRAMES_PER_SECOND);
 
         try {
@@ -95,7 +101,7 @@ public class StateMachineFactory {
         EdgeDetector detector = new EdgeDetector(palmYNumFrames, palmYThreshold, r -> r.getPalmPositionY());
         com.himanshuvirmani.StateMachine<StateMachine.State, EdgeDetector.Edge> machine = new com.himanshuvirmani.StateMachine(StateMachine.State.NEUTRAL);
 
-        StateMachine stateMachine = getStateMachine(detector, machine, VERTICAL_MAX_LOW, VERTICAL_MAX_MEDIUM, Motion.VerticalMovement, (int) (palmYTBufferSeconds * FRAMES_PER_SECOND));
+        StateMachine stateMachine = getStateMachine(detector, machine, VERTICAL_MAX_LOW, VERTICAL_MAX_MEDIUM, VERTICAL_MAX_HIGH, Motion.VerticalMovement, (int) (palmYTBufferSeconds * FRAMES_PER_SECOND));
         stateMachine.setFramesPerSecond(FRAMES_PER_SECOND);
 
         try {
@@ -119,10 +125,10 @@ public class StateMachineFactory {
         return stateMachine;
     }
 
-    private StateMachine getStateMachine(EdgeDetector detector, com.himanshuvirmani.StateMachine<StateMachine.State, EdgeDetector.Edge> machine, double max_low, double max_mid, Motion motion, int neutralBuffer) {
+    private StateMachine getStateMachine(EdgeDetector detector, com.himanshuvirmani.StateMachine<StateMachine.State, EdgeDetector.Edge> machine, double max_low, double max_mid, double max_high, Motion motion, int neutralBuffer) {
         if (neutralBuffer != 0)
-            return new BufferedStateMachine(machine, detector, max_low, max_mid, motion, neutralBuffer);
+            return new BufferedStateMachine(machine, detector, max_low, max_mid, max_high, motion, neutralBuffer);
 
-        return new StateMachine(machine, detector, max_low, max_mid, motion);
+        return new StateMachine(machine, detector, max_low, max_mid, max_high, motion);
     }
 }

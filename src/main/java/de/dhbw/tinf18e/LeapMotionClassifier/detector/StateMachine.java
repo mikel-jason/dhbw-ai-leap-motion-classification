@@ -36,6 +36,9 @@ public class StateMachine {
     /** Max value to be classified as MEDIUM frequency */
     private final double MAX_MEDIUM;
 
+    /** Max value to be classified as HIGH frequency. Above is RANDOM. */
+    private final double MAX_HIGH;
+
     /** Motion to be analyzed with this machine */
     private final Motion motion;
 
@@ -52,7 +55,7 @@ public class StateMachine {
         EdgeDetector.Edge edge = detector.next(frame.getLeapRecord());
         frame.setEdge(motion, edge);
         fire(edge);
-        return getFrequencyLevel(getCount(), frame.getFrameNumber(), MAX_LOW, MAX_MEDIUM);
+        return getFrequencyLevel(getCount(), frame.getFrameNumber(), MAX_LOW, MAX_MEDIUM, MAX_HIGH);
     }
 
     /**
@@ -75,14 +78,16 @@ public class StateMachine {
         count++;
     }
 
-    protected FrequencyLevel getFrequencyLevel(double count, double frameNumber, double max_low, double max_mid) {
+    protected FrequencyLevel getFrequencyLevel(double count, double frameNumber, double max_low, double max_mid, double max_high) {
         double frequency = count * 60.0 * (double) framesPerSecond / frameNumber;
         if (frequency <= max_low) {
             return FrequencyLevel.LOW;
         } else if (frequency <= max_mid) {
             return FrequencyLevel.MEDIUM;
-        } else {
+        } else if (frequency <= max_high) {
             return FrequencyLevel.HIGH;
+        } else {
+            return FrequencyLevel.RANDOM;
         }
     }
 }

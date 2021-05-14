@@ -9,8 +9,8 @@ public class BufferedStateMachine extends StateMachine {
     /** Number of observed neutral edges in a row */
     private int currentFrameBuffer = 0;
 
-    public BufferedStateMachine(com.himanshuvirmani.StateMachine<State, EdgeDetector.Edge> machine, EdgeDetector detector, double MAX_LOW, double MAX_MEDIUM, Motion motion, int frameBuffer) {
-        super(machine, detector, MAX_LOW, MAX_MEDIUM, motion);
+    public BufferedStateMachine(com.himanshuvirmani.StateMachine<State, EdgeDetector.Edge> machine, EdgeDetector detector, double MAX_LOW, double MAX_MEDIUM, double MAX_HIGH, Motion motion, int frameBuffer) {
+        super(machine, detector, MAX_LOW, MAX_MEDIUM, MAX_HIGH, motion);
         this.frameBuffer = frameBuffer;
     }
 

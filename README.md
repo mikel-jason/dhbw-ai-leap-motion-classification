@@ -61,10 +61,24 @@ The following image shows that, despite the interim *NEUTRAL* edge (frames 516-5
 ### Movement frequencies
 Using the counts from the FSM, frequencies can be calculated. Then, these are classified as *LOW*, *MEDIUM* or *HIGH*. For each target movement, the threshold for each category can be set individually.
 
+In addition to the levels explained, a fourth level of frequency is introduced: *RANDOM*. This represents values higher than a *HIGH* upper limit and catches situations where a user behaves rather randomly than according to the game.   
+
 ### Dempster Shafer theory (DST)
 DST is used to determine a difficulty level from the categorized movement frequencies. See [Wikipedia](https://en.wikipedia.org/wiki/Dempster%E2%80%93Shafer_theory) for more info about DST.
 
 For each calculated movement, an observation for DST is generated. E.g. the variation of height is *MEDIUM*, we can say that, with a certain *mass*, the movement corresponds to either Class A or B. Aggregating these facts over all movements, DST provides a *belief*, *plausibility* and *doubt* for each class. Here, the class with the highest plausibility is chosen as the player's difficulty level. If multiple classes have the same plausibility, the easiest of these is selected, preferring the success for the player over possible frustration.
+
+To properly acknowledge a *RANDOM* frequency, different certainties are used. A certainty represents how certain a fact mentioned above is. Here, facts for *RANDOM* are set with a higher certainty than any other. This leads to a higher penalization of *RANDOM*. \
+This app uses a certainty of 0.6 for general facts and 0.9 for *RANDOM*. Whenever a *RANDOM* is detected, the frame is classified as *ClassD* for randomness. These numbers are dependent on how many motions / observations are considered and would have to be adjusted when adding new observations.
+
+With *RANDOM*, the adjusted DST table is:
+
+| Movement | Class A | Class B | Class C | Class D |
+|--------- | ------- | ------- | ------- | ------- |
+Variation of height | HIGH, MEDIUM | MEDIUM, LOW | LOW | RANDOM |
+Left-right-movement with immediate counter-movement | HIGH, MEDIUM | MEDIUM, LOW | LOW | RANDOM |
+Multiple thumb spreads (missed shot) | HIGH, MEDIUM | MEDIUM, LOW | LOW | RANDOM |
+Spread of all fingers (spasm) | HIGH, MEDIUM | MEDIUM, LOW | LOW | RANDOM |
 
 ## Implementation
 The implementation follows the concept above.

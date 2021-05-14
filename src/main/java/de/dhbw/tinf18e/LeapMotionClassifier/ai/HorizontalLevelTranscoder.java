@@ -10,6 +10,8 @@ public class HorizontalLevelTranscoder extends AbstractMotionLevelTranscoder {
     @Override
     public List<Integer> getMeasureEntryCode(FrequencyLevel level) {
         switch (level) {
+            case RANDOM:
+                return getDstBitmap(Arrays.asList(Difficulty.ClassD));
             case HIGH:
                 return getDstBitmap(Arrays.asList(Difficulty.ClassA));
             case MEDIUM:

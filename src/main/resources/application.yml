@@ -23,10 +23,14 @@ detectors:
 # Two values per motion:
 # -> low: Max number of motions per second the be regarded as LOW frequency
 # -> medium: Max number of motions per second the be regarded as MEDIUM frequency
+# -> high: Max number of motions per second the be regarded as HIGH frequency
+#          All values above high will be recognized as RANDOM
 motion:
   move-vertical:
     low: 1
     medium: 2
+    high: 5
   counter-move-horizontal:
     low: 1
     medium: 2
+    high: 5

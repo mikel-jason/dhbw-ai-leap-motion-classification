@@ -56,6 +56,11 @@ public abstract class AbstractMotionLevelTranscoder {
     /** Certainty of the DST measure entry */
     public double getCertainty(FrequencyLevel level) {
         // set standard value, can be overridden
+        // detecting a RANDOM level is penalized more towards ClassD
+        // by returning a higher certainty
+        if (FrequencyLevel.RANDOM.equals(level))
+            return 0.9;
+
         return 0.6;
     }
 
