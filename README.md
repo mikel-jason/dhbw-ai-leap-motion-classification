@@ -119,7 +119,7 @@ For a more intuitive way calibrate, frame numbers shall be transformed to the ti
 From the given example data and the description that each measurement is as least 1 minute long, the FPS rate is assumed to be 50.
 
 ### First records
-PLaying the game or starting a measurement, users are assumed to first click the *Start* button and then positioning themselves and their hands above the sensor. Then, the very first frames represent non-representative data. Therefore, there's an option to skip a duration at the beginning. This is set to 1 second.
+Playing the game or starting a measurement, users are assumed to first click the *Start* button and then positioning themselves and their hands above the sensor. Then, the very first frames represent non-representative data. Therefore, there's an option to skip a duration at the beginning. This is set to 1 second.
 
 ### Calibration
 The calibration for the time boxes were done with a given example dataset holding predefined movements.
@@ -161,6 +161,6 @@ The classification diagram of sample 3 shows how the classification stabilizes o
 Overall, the application and implemented model show their capability to classify different LEAP motion data samples into different classes, based on DST. All game samples (1 - 4) have been assigned to different classes. Ultimately, this only shows the technical feasibility. Without more intel about the game, especially which sequences of the game correspond to the samples, and the users' assessment, we cannot conclude whether this matches the target classification and behavior of the game.
 
 ## Acknowledgements
-- Benjamin Führnohr, author of the class for plain DST (see [de.dhbw.tinf18e.LeapMotionClassifier.ai.dempster](./src/main/java/de/dhbw/tinf18e/LeapMotionClassifier/ai/dempster))
+- Benjamin Fürnrohr, author of the class for plain DST (see [de.dhbw.tinf18e.LeapMotionClassifier.ai.dempster](./src/main/java/de/dhbw/tinf18e/LeapMotionClassifier/ai/dempster))
 - [himanshuvirmani](https://github.com/himanshuvirmani/), author of the used FSM library [java-state-machine](https://github.com/himanshuvirmani/java-state-machine)
 
