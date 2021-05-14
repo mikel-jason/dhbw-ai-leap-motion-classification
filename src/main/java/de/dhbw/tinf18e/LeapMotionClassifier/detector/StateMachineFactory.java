@@ -83,6 +83,10 @@ public class StateMachineFactory {
             machine.transition().from(StateMachine.State.NEUTRAL).to(StateMachine.State.B).on(EdgeDetector.Edge.DOWN).create();
             machine.transition().from(StateMachine.State.B).to(StateMachine.State.B_A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
 
+            // multiple counter movements (toggle)
+            machine.transition().from(StateMachine.State.A_B).to(StateMachine.State.B_A).on(EdgeDetector.Edge.UP).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+            machine.transition().from(StateMachine.State.B_A).to(StateMachine.State.A_B).on(EdgeDetector.Edge.DOWN).setOnSuccessListener((from, to, on) -> stateMachine.incrementCount()).create();
+
             // back to NEUTRAL
             machine.transition().from(StateMachine.State.A).to(StateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
             machine.transition().from(StateMachine.State.A_B).to(StateMachine.State.NEUTRAL).on(EdgeDetector.Edge.NEUTRAL).create();
