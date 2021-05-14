@@ -47,7 +47,7 @@ ELSE
     RETURN no movement
 ```
 
-This leads to two calibration parameters: The number of frames within a box and the threshold. These are be set for each observation individually.
+This leads to two calibration parameters: The number of frames within a box and the threshold. These are set for each observation individually.
 
 ### Finite state machine (FSM)
 To extract more complex movements (or movement pattern) from these simple movements *up*, *down* or *no movement*, finite state machines are used. Per target movement, one FSM is implemented for individual logic. This allows wide customization per movement. While defining the states of the FSM, success handlers on transitions are used to count transitions into a target movement. This also prevents from counting one movement multiple times since then, the state machine does not change state.
@@ -91,13 +91,14 @@ The implemented FSM is shown below. The green transitions represent a detected m
 ![](./docs/fsm_vertical.png)
 
 ### Approach for the horizontal counter-movement
-This adds counter-movement to the same logic as for the variation of height. The FSM consists of five states not only representing *no movement*, *left* and *right*, but also *left-right*, if a move to left is directly follows by a move to the right, and *right-left*. With these, the two paths for the target movement can be realized:
+This adds counter-movement to the same logic as for the variation of height. The FSM consists of five states not only representing *no movement*, *left* and *right*, but also *left-right*, if a move to the left is directly followed by a move to the right, and *right-left*. With these, the two paths for the target movement can be realized:
 
 - No movement -> Left -> Left-right
 - No movement-> Right -> Right-left
 
 The implemented FSM is shown below.
 
+Note: Since movements are always encoded to UP/DOWN, LEFT corresponds to UP and RIGHT to DOWN.
 
 ![](./docs/fsm_horizontal.png)
 
@@ -107,14 +108,14 @@ Each last transition marks a success and is counted by the state machine.
 *(not implemented)* \
 This is similar to the horizontal counter-movement, because a short spread of the thumbs matches shooting in-game. Here, there is no counter-movement, but the same movement pattern at least twice. In data, this means a FSE for the path *No movement -> open -> close -> open -> close* since the data gives the angle between thumb and palm. 
 
-It is important to note, that this cannot be directly linked to the single value of the thumb's angle. If there's a hand spread, the thumb spreads, too. This target movement points tn only spreading the thumb, so this has to be observed and thumb spreads due to hand spreads have to be mitigated.
+It is important to note, that this cannot be directly linked to the single value of the thumb's angle. If there's a hand spread, the thumb spreads, too. This target movement points to only spreading the thumb, so this has to be observed and thumb spreads due to hand spreads have to be mitigated.
 
 ### Approach for spreading all fingers / the hand
 *(not implemented)* \
 Respecting the explained issue of distinguishing spreading a thumb and all fingers, this equals the variation of height logic. Spreading the hand represents a spasm. Therefore, a quickly increasing angle (just like the height) can be used as criteria.
 
 ### Time domain and FPS
-For a more intuitive way calibrate, frame numbers shall be transformed to the time domain. This is done using a *frames per second* constant. This is set in [application.yml](./src/main/resources/application.yml).
+For a more intuitive way calibrate, frame numbers shall be transformed to the time domain. This is done using a *frames per second* constant which is set in the [application.yml](./src/main/resources/application.yml).
 
 From the given example data and the description that each measurement is as least 1 minute long, the FPS rate is assumed to be 50.
 
@@ -124,7 +125,7 @@ Playing the game or starting a measurement, users are assumed to first click the
 ### Calibration
 The calibration for the time boxes were done with a given example dataset holding predefined movements.
 
-The calibration of what is a *LOW* /... frequency would require more information about the game, its steering and players' assessments. The thresholds for the categorization are chosen based on two more data samples with no info about the player of the movements he/she is required to do. This is an immense lack of information since the app tries to detect unnecessary movements, but from data only, one cannot say which movement was necessary und which not. This leads to the corresponding parameter being easily customizable for someone with more intel.
+The calibration of what is a *LOW* /... frequency would require more information about the game, its steering and players' assessments. The thresholds for the categorization are chosen based on two more data samples with no info about the player of the movements he/she is required to do. This is an immense lack of information since the app tries to detect unnecessary movements, but from data only, one cannot say which movement was necessary und which wasn't. This leads to the corresponding parameter being easily customizable for someone with more intel.
 
 ## Results and assessment
 The application is executed for five data samples. The results are shown in the images below. To display distinct values in the same plot, they are mapped to numbers as follows:
@@ -154,7 +155,7 @@ This is demo data. Here, predefined movements are performed. This is no sample r
 
 The first two plot of each sample show the measured data for the palm position in X and Y dimension in blue. The orange points represent the detected edge *UP*, *DOWN* and *NEUTRAL*. Here, we see an overall good match for the detected edges. Some particular frames are questionable in terms of if they should be detected or not. This is especially the case for the Y dimension. Sample 1 and 3 both show a decreasing height of the palm in the long run. Here, data should be compared with the users' assessment to re-calibrate. Sample 4 shows that a change of the palm's height is detected correctly (see frame 1,800 - 1,900).
 
-Most samples show significant different behavior during the first frames. This supports the application's option to skip frame in the beginning. This also happens at the end of a measurement. From the perspective of a live classification, the end of a game cannot be determined without game context. Therefore, the misleading classification at the end cannot be skipped. This has to be seen in the context of a user quitting the current game. Then, the live classification is not important anyways, so this is not expected to be important either.
+Most samples show significantly different behavior during the first frames. This supports the application's option to skip frames in the beginning. This also happens at the end of a measurement. From the perspective of a live classification, the end of a game cannot be determined without game context. Therefore, the misleading classification at the end cannot be skipped. This has to be seen in the context of a user quitting the current game. Then, the live classification is not important anyways, so this is not expected to be important either.
 
 The classification diagram of sample 3 shows how the classification stabilizes over time. This is expected since during frequency calculation over a short period of time, a single event effects the frequency more than over a long period of time. Therefore, we see the jump of the frequency level of the vertical movement (Y) from *LOW* to *RANDOM* which means more than a *HIGH* frequency. Then, the level slowly decreases as there is more time passed but no event detected. At the end, another event is detected which lifts the level from *MEDIUM* to *HIGH*, being less volatile. This leads to the conclusion, that longer measurements are more resilient and should be preferred.
 
